@@ -1,0 +1,118 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+	<title>{{page}}</title>
+
+	<style>
+		table {
+			width: 80%;
+			margin: 20px auto;
+			border-collapse: collapse;
+		}
+
+		th,
+		td {
+			padding: 10px;
+			text-align: left;
+			border: 1px solid #ccc;
+		}
+
+		th {
+			background-color: #f2f2f2;
+		}
+
+		tr:nth-child(even) {
+			background-color: #f2f2f2;
+		}
+
+		tr:hover {
+			background-color: #ddd;
+		}
+		.text{
+	color: blue;
+	font-weight: bold;
+	font-family: 'Times New Roman', Times, serif;
+}.ok{
+	color: gray;
+	text-decoration: none;
+}
+.ok:hover{
+	color: white;
+	text-decoration: none;
+}
+	</style>
+</head>
+
+<body>
+
+
+<div class="container mt-5 col-6">
+	<form class="col-6 mx-auto card p-3 shadow-lg" method="post" enctype="multipart/form-data">
+		{% csrf_token %}
+		<h3 class="text text-center"> Print Receipt </h3>
+		<br>
+		<h4 style="font-family: 'Times New Roman', Times, serif;"> Print Receipt</h4>
+		<hr>
+		<div class="form-group">
+		<label for="exampleInputEmail1">Item Name </label>
+		<input type="text" name="name" class="form-control" required>
+		</div>
+		<div class="form-group">
+		<label for="exampleInputEmail1">Price </label>
+		<input name="price" type="number" class="form-control" required>
+		</div>
+		<div class="form-group">
+		<label for="exampleInputPassword1">Quantity </label>
+		<input name="quantity" class="form-control" type="number" required>
+		</div>
+		<button type="submit" class="btn btn-outline-secondary">Add Data</button>
+	</form>
+	<hr>
+	<div class="class mt-5">
+		<form action="">
+		<button class="btn btn-outline-primary"> <a class="ok" href="{% url 'pdf' %}">Generate Bill </a></button>
+		<button class="btn btn-outline-dark"> <a class="ok" href="{% url 'logout' %}">Logout</a></button>
+		</form>
+
+		<table class="table mt-6">
+			<thead>
+				<tr>
+					<th scope="col">S.No. </th>
+					<th scope="col">Item name </th>
+					<th scope="col">Price </th>
+					<th scope="col">Quantity </th>
+					<th scope="col">Total </th>
+					<th scope="col">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for receipt in receipts %}
+				<tr>
+					<th scope="row">{{forloop.counter}}</th>
+					<td>{{receipt.name}}</td>
+					<td> ₹{{receipt.price}}</td>
+					<td>{{receipt.quantity}}</td>
+					<td> ₹{{receipt.total}}</td>
+					<td>
+						<a href="http://127.0.0.1:8000/print/delete_receipt/{{receipt.id}}" class="btn btn-outline-danger m-2">Delete </a>
+						<a href="http://127.0.0.1:8000/print/update_receipt/{{receipt.id }}" class="btn btn-outline-success">Update </a>
+					</td>
+				</tr>
+				{% endfor %}
+				<tr>
+					<th colspan="4" class="text-right">Total Sum :</th>
+					<td>{{ total_sum }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+</body>
+
+</html>
